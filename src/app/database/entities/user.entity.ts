@@ -29,4 +29,8 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  encryptPassword() {
+    this.password = `encrypted-${this.password}`;
+  }
 }
