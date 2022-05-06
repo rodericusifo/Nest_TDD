@@ -1,3 +1,3 @@
-export class DeleteDTO<P> {
+export class DeleteDTO<P = unknown> {
   param?: P;
 }

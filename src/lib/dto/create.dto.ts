@@ -1,3 +1,3 @@
-export class CreateDTO<B> {
+export class CreateDTO<B = unknown> {
   body?: B;
 }

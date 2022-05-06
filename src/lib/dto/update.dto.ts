@@ -1,4 +1,4 @@
-export class UpdateDTO<P, B> {
+export class UpdateDTO<P = unknown, B = unknown> {
   param?: P;
   body?: B;
 }

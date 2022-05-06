@@ -1,4 +1,4 @@
-export class ReadDTO<P, Q> {
+export class ReadDTO<P = unknown, Q = unknown> {
   param?: P;
   query?: Q;
 }
