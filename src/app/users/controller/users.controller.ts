@@ -14,7 +14,6 @@ export class UsersController {
   @Post()
   async createUser(@Body() body: CreateUserBodyRequest) {
     const data = await this.usersService.createUser({ body });
-    console.log(data.password);
     return this.responseService.success(
       UserSuccessResponse.CREATE_USER_SUCCESS,
       data,
