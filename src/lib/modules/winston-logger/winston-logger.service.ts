@@ -1,28 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import * as moment from 'moment';
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 
 const LOGGER_MAX_SIZE = '10m';
 const LOGGER_MAX_FILES = '7d';
-enum LOGGER_NAME {
-  SYSTEM = 'system',
-}
 
 @Injectable()
 export class WinstonLoggerService {
-  constructor(private configService: ConfigService) {}
-
   createLogger(): winston.LoggerOptions {
-    const loggerSystemEnv: boolean =
-      this.configService.get('LOGGER_SYSTEM') || false;
     const timestamp: number = moment().valueOf();
     const transports: winston.transport[] = [];
 
-    const configTransportSystemInfo: DailyRotateFile = new DailyRotateFile({
+    const configTransportInfo: DailyRotateFile = new DailyRotateFile({
       filename: `%DATE%.log`,
-      dirname: `logs/${LOGGER_NAME.SYSTEM}/info`,
+      dirname: `logs/info`,
       datePattern: 'YYYY-MM-DD',
       zippedArchive: true,
       maxSize: LOGGER_MAX_SIZE,
@@ -30,9 +22,9 @@ export class WinstonLoggerService {
       level: 'info',
     });
 
-    const configTransportSystemError: DailyRotateFile = new DailyRotateFile({
+    const configTransportError: DailyRotateFile = new DailyRotateFile({
       filename: `%DATE%.log`,
-      dirname: `logs/${LOGGER_NAME.SYSTEM}/error`,
+      dirname: `logs/error`,
       datePattern: 'YYYY-MM-DD',
       zippedArchive: true,
       maxSize: LOGGER_MAX_SIZE,
@@ -40,10 +32,8 @@ export class WinstonLoggerService {
       level: 'error',
     });
 
-    if (loggerSystemEnv) {
-      transports.push(configTransportSystemInfo);
-      transports.push(configTransportSystemError);
-    }
+    transports.push(configTransportInfo);
+    transports.push(configTransportError);
 
     transports.push(
       new winston.transports.Console({
