@@ -1,3 +1,4 @@
+import { WinstonLogger } from '@lib/decorators/winston-logger.decorator';
 import { HTTPHelper } from '@lib/helpers/http.helper';
 import {
   ArgumentsHost,
@@ -13,6 +14,8 @@ import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 export class ErrorFilter implements ExceptionFilter {
   private readonly loggerConsole = new Logger(ErrorFilter.name);
 
+  constructor(@WinstonLogger() private readonly loggerFile) {}
+
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx: HttpArgumentsHost = host.switchToHttp();
     const response: any = ctx.getResponse();
@@ -23,6 +26,7 @@ export class ErrorFilter implements ExceptionFilter {
       const exceptionData: Record<string, any> = exceptionHttp.response;
 
       this.loggerConsole.error(HTTPHelper.error(exception));
+      this.loggerFile.error(exception);
 
       response.status(status).json({
         success: false,
@@ -36,6 +40,7 @@ export class ErrorFilter implements ExceptionFilter {
       const error = 'Internal Server Error';
 
       this.loggerConsole.error(HTTPHelper.error(exception));
+      this.loggerFile.error(exception);
 
       response.status(status).json({
         success: false,

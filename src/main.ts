@@ -1,5 +1,4 @@
 import { AppModule } from '@app/app.module';
-import { ErrorFilter } from '@lib/filters/error.filter';
 import {
   ClassSerializerInterceptor,
   Logger,
@@ -18,7 +17,6 @@ async function bootstrap() {
   const logger = new Logger('Main');
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalFilters(new ErrorFilter());
   app.setGlobalPrefix(appPrefix);
   await app.listen(configService.get('HTTP_PORT') || 3000, () => {
     logger.log(
