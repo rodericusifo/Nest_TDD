@@ -9,12 +9,13 @@ import {
   Logger,
 } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
+import * as winston from 'winston';
 
 @Catch()
 export class ErrorFilter implements ExceptionFilter {
   private readonly loggerConsole = new Logger(ErrorFilter.name);
 
-  constructor(@WinstonLogger() private readonly loggerFile) {}
+  constructor(@WinstonLogger() private readonly loggerFile: winston.Logger) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx: HttpArgumentsHost = host.switchToHttp();
