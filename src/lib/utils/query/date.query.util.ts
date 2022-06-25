@@ -1,19 +1,20 @@
+import * as moment from 'moment';
 import { Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 
 export const RangeDates = (from: Date | string, to: Date | string) => {
-  const dateFrom = typeof from === 'string' ? new Date(from) : from;
-  const dateTo = typeof to === 'string' ? new Date(to) : to;
-  dateFrom.setDate(dateFrom.getDate() - 1);
-  dateTo.setDate(dateTo.getDate() + 1);
+  const dateFrom = moment(from);
+  const dateTo = moment(to);
+  dateFrom.subtract(1, 'days');
+  dateTo.add(1, 'days');
   return Between(dateFrom.toISOString(), dateTo.toISOString());
 };
 
 export const FromDate = (value: Date | string) => {
-  const date = typeof value === 'string' ? new Date(value) : value;
+  const date = moment(value);
   return MoreThanOrEqual(date.toISOString());
 };
 
 export const ToDate = (value: Date | string) => {
-  const date = typeof value === 'string' ? new Date(value) : value;
+  const date = moment(value);
   return LessThanOrEqual(date.toISOString());
 };
